@@ -1,0 +1,174 @@
+swagger: "2.0"
+info:
+  title: "Inventory Microservice"
+  description: "API for user accounts."
+  version: "1.1.0"
+  contact:
+    email: "aditya.7sinha@gmail.com"
+host: "localhost"
+basePath: "/inventory-service/v1"
+schemes:
+  - http
+consumes:
+  - application/json;charset=utf-8
+produces:
+  - application/json;charset=utf-8
+tags:
+  - name: event
+    description: "Everything about an event"
+  - name: events
+    description: "Everything about list of events"
+  - name: issue
+    description: "Everything about an issue"
+  - name: issues
+    description: "Everything about list of issues"
+paths:
+  /user/register:
+    post:
+      tags:
+        - user
+      summary: "This operation is to create user"
+      parameters:
+        - in: "body"
+          name: "user"
+          description: "User object that needs to be added to the users"
+          required: true
+          schema:
+            $ref: "#/definitions/User_Create"
+      responses:
+        "201":
+          description: "User Created"
+          schema:
+            $ref: "#/definitions/User"
+        "401":
+          description: "Invalid"
+          schema:
+            $ref: "#/definitions/Error"
+
+  /user/login:
+    post:
+      summary: "login for user"
+      description: "This operation is user for login as a user"
+      tags:
+        - user
+      parameters:
+        - in: "body"
+          name: "user"
+          description: "identification of the user"
+          required: true
+          schema:
+            $ref: "#/definitions/User_Login"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/User"
+        "401":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+  /user/{id}:
+    get:
+      summary: "retrieving Product by ID"
+      description: "This operation retrieves a Product entity."
+      tags:
+        - user
+      parameters:
+        - name: "id"
+          description: "identification of the user"
+          required: true
+          type: string
+          in: path
+      responses:
+        "201":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/User"
+        "401":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  User_Create:
+    type: "object"
+    description: "User is the person who is willing to create a new account"
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: "string"
+        description: "name of the user"
+      password:
+        type: "string"
+        description: "password of user account"
+      age:
+        type: "integer"
+        description: "age of the user"
+      phone_number:
+        type: "string"
+        description: "phone number of the user"
+      home_location:
+        $ref: "#/definitions/Home_Location"
+      country:
+        type: "string"
+        description: "country of the user"
+      time_of_creation:
+        type: "string"
+        description: "timestamp is the time at which user is created"
+  Home_Location:
+    type: "object"
+    description: "location of the user's place or origin"
+    properties:
+      latitude:
+        type: "string"
+        description: "latitude of home_location"
+      longitude:
+        type: "string"
+        description: "longitude of home_location"
+  User:
+    type: "object"
+    description: "returned user details"
+    properties:
+      id:
+        type: "integer"
+        minimum: 1000
+        maximum: 9999
+        description: "unique number for each user"
+      username:
+        type: "string"
+        description: "name of the user"
+      age:
+        type: "integer"
+        description: "age of the user"
+      phone_number:
+        type: "string"
+        description: "phone number of the user"
+      home_location:
+        $ref: "#/definitions/Home_Location"
+      country:
+        type: "string"
+        description: "country of the user"
+      time_of_creation:
+        type: "string"
+        description: "timestamp is the time at which user is created"
+  User_Login:
+    type: "object"
+    description: "login by the user"
+    properties:
+      username:
+        type: "string"
+        description: "name of the user"
+      password:
+        type: "string"
+        description: "password of user account"
+  Error:
+    type: "object"
+    description: "error codes"
+    properties:
+      code:
+        type: "string"
+        description: "returned code"
+      message:
+        type: "string"
+        description: "returned message by the user"
