@@ -23,59 +23,76 @@ tags:
   - name: issues
     description: "Everything about list of issues"
 paths:
-  /user/register:
+  /event:
     post:
       tags:
-        - user
-      summary: "This operation is to create user"
+        - event
+      summary: "This operation is to create event"
       parameters:
         - in: "body"
-          name: "user"
-          description: "User object that needs to be added to the users"
+          name: "body"
+          description: "Event object that needs to be added to the events"
           required: true
           schema:
-            $ref: "#/definitions/User_Create"
+            $ref: "#/definitions/Event_Create"
       responses:
         "201":
-          description: "User Created"
+          description: "Event Created"
           schema:
-            $ref: "#/definitions/User"
+            $ref: "#/definitions/Event"
         "401":
           description: "Invalid"
           schema:
             $ref: "#/definitions/Error"
-
-  /user/login:
-    post:
-      summary: "login for user"
-      description: "This operation is user for login as a user"
+    patch:
       tags:
-        - user
+        - event
+      summary: "This operation is to patch event"
       parameters:
         - in: "body"
-          name: "user"
-          description: "identification of the user"
+          name: "body"
+          description: "Event object that needs to be added to the events"
           required: true
           schema:
-            $ref: "#/definitions/User_Login"
+            $ref: "#/definitions/Event_Create"
       responses:
-        "200":
-          description: "Success"
+        "201":
+          description: "Event Updated"
           schema:
-            $ref: "#/definitions/User"
+            $ref: "#/definitions/Event"
         "401":
-          description: "Not Found"
+          description: "Invalid"
           schema:
             $ref: "#/definitions/Error"
-  /user/{id}:
-    get:
-      summary: "retrieving Product by ID"
-      description: "This operation retrieves a Product entity."
+    put:
       tags:
-        - user
+        - event
+      summary: "This operation is to put event"
       parameters:
-        - name: "id"
-          description: "identification of the user"
+        - in: "body"
+          name: "body"
+          description: "Event object that needs to be added to the events"
+          required: true
+          schema:
+            $ref: "#/definitions/Event_Create"
+      responses:
+        "201":
+          description: "Event Put"
+          schema:
+            $ref: "#/definitions/Event"
+        "401":
+          description: "Invalid"
+          schema:
+            $ref: "#/definitions/Error"
+  /event/{eventid}:
+    get:
+      summary: "retrieving Event by Id"
+      description: "This operation retrieves a Event entity."
+      tags:
+        - "event"
+      parameters:
+        - name: "eventid"
+          description: "identification of the user who creates entity"
           required: true
           type: string
           in: path
@@ -83,42 +100,41 @@ paths:
         "201":
           description: "Success"
           schema:
-            $ref: "#/definitions/User"
+            $ref: "#/definitions/Event"
         "401":
           description: "Not Found"
           schema:
             $ref: "#/definitions/Error"
 definitions:
-  User_Create:
+  Event_Create:
     type: "object"
-    description: "User is the person who is willing to create a new account"
+    description: "Event is the created"
     required:
-      - username
-      - password
+      - userId
     properties:
-      username:
+      user_id:
         type: "string"
-        description: "name of the user"
-      password:
+        description: "user id with which creates the event"
+      name:
         type: "string"
-        description: "password of user account"
-      age:
-        type: "integer"
-        description: "age of the user"
-      phone_number:
+        description: "name of the event"
+      time_of_event:
         type: "string"
-        description: "phone number of the user"
-      home_location:
-        $ref: "#/definitions/Home_Location"
+        description: "time of event"
+      short_description:
+        type: "string"
+        description: "short description of event"
+      summary:
+        type: "string"
+        description: "long summary of the event"
+      event_location:
+        $ref: "#/definitions/Event_Location"
       country:
         type: "string"
-        description: "country of the user"
-      time_of_creation:
-        type: "string"
-        description: "timestamp is the time at which user is created"
-  Home_Location:
+        description: "country of the event"
+  Event_Location:
     type: "object"
-    description: "location of the user's place or origin"
+    description: "location of the event's place or origin"
     properties:
       latitude:
         type: "string"
@@ -126,42 +142,36 @@ definitions:
       longitude:
         type: "string"
         description: "longitude of home_location"
-  User:
+      address:
+        type: "string"
+        description: "location of user entered by user manually"
+  Event:
     type: "object"
-    description: "returned user details"
+    description: "returned event details"
     properties:
-      id:
-        type: "integer"
-        minimum: 1000
-        maximum: 9999
-        description: "unique number for each user"
-      username:
+      user_id:
         type: "string"
-        description: "name of the user"
-      age:
-        type: "integer"
-        description: "age of the user"
-      phone_number:
+        description: "user id with which created the event"
+      event_id:
         type: "string"
-        description: "phone number of the user"
-      home_location:
-        $ref: "#/definitions/Home_Location"
+        description: "event id of created event"
+      name:
+        type: "string"
+        description: "name of the event"
+      time_of_event:
+        type: "string"
+        description: "time of event"
+      short_description:
+        type: "string"
+        description: "short description of event"
+      summary:
+        type: "string"
+        description: "long summary of the event"
+      event_location:
+        $ref: "#/definitions/Event_Location"
       country:
         type: "string"
-        description: "country of the user"
-      time_of_creation:
-        type: "string"
-        description: "timestamp is the time at which user is created"
-  User_Login:
-    type: "object"
-    description: "login by the user"
-    properties:
-      username:
-        type: "string"
-        description: "name of the user"
-      password:
-        type: "string"
-        description: "password of user account"
+        description: "country of the event"
   Error:
     type: "object"
     description: "error codes"
