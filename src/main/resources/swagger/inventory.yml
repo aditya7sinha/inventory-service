@@ -16,12 +16,12 @@ produces:
 tags:
   - name: event
     description: "Everything about an event"
-  - name: events
-    description: "Everything about list of events"
+  # - name: events
+  #   description: "Everything about list of events"
   - name: issue
     description: "Everything about an issue"
-  - name: issues
-    description: "Everything about list of issues"
+  # - name: issues
+  #   description: "Everything about list of issues"
 paths:
   /event:
     post:
@@ -84,6 +84,20 @@ paths:
           description: "Invalid"
           schema:
             $ref: "#/definitions/Error"
+  /event/:
+    get:
+      summary: "retrieving all Events"
+      tags:
+        - "event"
+      responses:
+        "201":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ArrayOfEvents"
+        "401":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
   /event/{eventid}:
     get:
       summary: "retrieving Event by Id"
@@ -101,6 +115,104 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/Event"
+        "401":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+  /issue:
+    post:
+      tags:
+        - issue
+      summary: "This operation is to create issue"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Issue object that needs to be added to the issues"
+          required: true
+          schema:
+            $ref: "#/definitions/Issue_Create"
+      responses:
+        "201":
+          description: "Issue Created"
+          schema:
+            $ref: "#/definitions/Issue"
+        "401":
+          description: "Invalid"
+          schema:
+            $ref: "#/definitions/Error"
+    patch:
+      tags:
+        - issue
+      summary: "This operation is to patch issue"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Issue object that needs to be added to the issues"
+          required: true
+          schema:
+            $ref: "#/definitions/Issue_Create"
+      responses:
+        "201":
+          description: "Issue Updated"
+          schema:
+            $ref: "#/definitions/Issue"
+        "401":
+          description: "Invalid"
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      tags:
+        - issue
+      summary: "This operation is to put issue"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Issue object that needs to be added to the issues"
+          required: true
+          schema:
+            $ref: "#/definitions/Issue_Create"
+      responses:
+        "201":
+          description: "Issue Put"
+          schema:
+            $ref: "#/definitions/Issue"
+        "401":
+          description: "Invalid"
+          schema:
+            $ref: "#/definitions/Error"
+  /issue/:
+    get:
+      summary: "retrieving Issue by Id"
+      description: "This operation retrieves a Issue entity."
+      tags:
+        - "issue"
+      responses:
+        "201":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ArrayOfIssues"
+        "401":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+
+  /issue/{issueid}:
+    get:
+      summary: "retrieving Issue by Id"
+      description: "This operation retrieves a Issue entity."
+      tags:
+        - "issue"
+      parameters:
+        - name: "issueid"
+          description: "identification of the user who creates entity"
+          required: true
+          type: string
+          in: path
+      responses:
+        "201":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Issue"
         "401":
           description: "Not Found"
           schema:
@@ -128,11 +240,30 @@ definitions:
         type: "string"
         description: "long summary of the event"
       event_location:
-        $ref: "#/definitions/Event_Location"
+        $ref: "#/definitions/Location"
       country:
         type: "string"
         description: "country of the event"
-  Event_Location:
+      status:
+        type: "string"
+        description: "status of event"
+        enum: [ "created","active","postponed","terminated","completed" ]
+  Location_Ref:
+    type: "object"
+    description: "location of the event's place or origin"
+    properties:
+      location_id:
+        type: "string"
+      latitude:
+        type: "string"
+        description: "latitude of home_location"
+      longitude:
+        type: "string"
+        description: "longitude of home_location"
+      address:
+        type: "string"
+        description: "location of user entered by user manually"
+    Location:
     type: "object"
     description: "location of the event's place or origin"
     properties:
@@ -168,10 +299,94 @@ definitions:
         type: "string"
         description: "long summary of the event"
       event_location:
-        $ref: "#/definitions/Event_Location"
+        $ref: "#/definitions/Location_Ref"
       country:
         type: "string"
         description: "country of the event"
+      support:
+        type: "integer"
+        description: "number of votes"
+      status:
+        type: "string"
+        description: "status of event"
+        enum: [ "created","active","pending","terminated" ]
+  ArrayOfEvents:
+    type: "array"
+    description: "return all events"
+    items:
+      $ref: "#/definitions/Event"
+  Issue_Create:
+    type: "object"
+    description: "Issue is the created"
+    required:
+      - userId
+    properties:
+      user_id:
+        type: "string"
+        description: "user id with which creates the issue"
+      name:
+        type: "string"
+        description: "name of the issue"
+      time_of_Issue:
+        type: "string"
+        description: "time of issue"
+      short_description:
+        type: "string"
+        description: "short description of issue"
+      summary:
+        type: "string"
+        description: "long summary of the issue"
+      event_location:
+        $ref: "#/definitions/Location"
+      country:
+        type: "string"
+        description: "country of the Issue"
+      status:
+        type: "string"
+        description: "status of Issue"
+        enum: [ "created","active","postponed","terminated","completed" ]
+  Issue:
+    type: "object"
+    description: "returned issues details"
+    required:
+      - user_id
+      - event_id
+    properties:
+      user_id:
+        type: "string"
+        description: "user id with which created the issues"
+      event_id:
+        type: "string"
+        description: "event id of created issues"
+      name:
+        type: "string"
+        description: "name of the issues"
+      time_of_event:
+        type: "string"
+        description: "time of issues"
+      short_description:
+        type: "string"
+        description: "short description of issues"
+      summary:
+        type: "string"
+        description: "long summary of the issues"
+      event_location:
+        $ref: "#/definitions/Location_Ref"
+      country:
+        type: "string"
+        description: "country of the issues"
+      support:
+        type: "integer"
+        description: "number of votes"
+      status:
+        type: "string"
+        description: "status of issues"
+        enum: [ "created","active","pending","terminated" ]
+  ArrayOfIssues:
+    type: "array"
+    description: "return all issues"
+    items:
+      $ref: "#/definitions/Issue"
   Error:
     type: "object"
     description: "error codes"
@@ -181,4 +396,4 @@ definitions:
         description: "returned code"
       message:
         type: "string"
-        description: "returned message by the user"
+        description: "returned error message"
