@@ -263,7 +263,7 @@ definitions:
       address:
         type: "string"
         description: "location of user entered by user manually"
-    Location:
+  Location:
     type: "object"
     description: "location of the event's place or origin"
     properties:
@@ -309,7 +309,7 @@ definitions:
       status:
         type: "string"
         description: "status of event"
-        enum: [ "created","active","pending","terminated" ]
+        enum: [ "created","active","postponed","terminated","completed" ]
   ArrayOfEvents:
     type: "array"
     description: "return all events"
@@ -381,7 +381,7 @@ definitions:
       status:
         type: "string"
         description: "status of issues"
-        enum: [ "created","active","pending","terminated" ]
+        enum: [ "created","active","postponed","terminated","completed" ]
   ArrayOfIssues:
     type: "array"
     description: "return all issues"
