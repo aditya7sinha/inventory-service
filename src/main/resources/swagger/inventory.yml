@@ -44,17 +44,23 @@ paths:
           description: "Invalid"
           schema:
             $ref: "#/definitions/Error"
+  /event/{eventid}:
     patch:
       tags:
         - event
       summary: "This operation is to patch event"
       parameters:
-        - in: "body"
+        - in: body
           name: "body"
           description: "Event object that needs to be added to the events"
           required: true
           schema:
-            $ref: "#/definitions/Event_Create"
+            $ref: "#/definitions/Event"
+        - in: path
+          name: "eventid"
+          description: "eventId to be updated"
+          required: true
+          type: string
       responses:
         "201":
           description: "Event Updated"
@@ -64,41 +70,6 @@ paths:
           description: "Invalid"
           schema:
             $ref: "#/definitions/Error"
-    put:
-      tags:
-        - event
-      summary: "This operation is to put event"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Event object that needs to be added to the events"
-          required: true
-          schema:
-            $ref: "#/definitions/Event_Create"
-      responses:
-        "201":
-          description: "Event Put"
-          schema:
-            $ref: "#/definitions/Event"
-        "401":
-          description: "Invalid"
-          schema:
-            $ref: "#/definitions/Error"
-  /event/:
-    get:
-      summary: "retrieving all Events"
-      tags:
-        - "event"
-      responses:
-        "201":
-          description: "Success"
-          schema:
-            $ref: "#/definitions/ArrayOfEvents"
-        "401":
-          description: "Not Found"
-          schema:
-            $ref: "#/definitions/Error"
-  /event/{eventid}:
     get:
       summary: "retrieving Event by Id"
       description: "This operation retrieves a Event entity."
@@ -115,6 +86,20 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/Event"
+        "401":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+  /event/:
+    get:
+      summary: "retrieving all Events"
+      tags:
+        - "event"
+      responses:
+        "201":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ArrayOfEvents"
         "401":
           description: "Not Found"
           schema:
@@ -140,17 +125,23 @@ paths:
           description: "Invalid"
           schema:
             $ref: "#/definitions/Error"
+  /issue/{issueid}:
     patch:
       tags:
         - issue
       summary: "This operation is to patch issue"
       parameters:
+        - name: "issueid"
+          description: "identification of the user who creates entity"
+          required: true
+          type: string
+          in: path
         - in: "body"
           name: "body"
           description: "Issue object that needs to be added to the issues"
           required: true
           schema:
-            $ref: "#/definitions/Issue_Create"
+            $ref: "#/definitions/Issue"
       responses:
         "201":
           description: "Issue Updated"
@@ -160,43 +151,6 @@ paths:
           description: "Invalid"
           schema:
             $ref: "#/definitions/Error"
-    put:
-      tags:
-        - issue
-      summary: "This operation is to put issue"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Issue object that needs to be added to the issues"
-          required: true
-          schema:
-            $ref: "#/definitions/Issue_Create"
-      responses:
-        "201":
-          description: "Issue Put"
-          schema:
-            $ref: "#/definitions/Issue"
-        "401":
-          description: "Invalid"
-          schema:
-            $ref: "#/definitions/Error"
-  /issue/:
-    get:
-      summary: "retrieving Issue by Id"
-      description: "This operation retrieves a Issue entity."
-      tags:
-        - "issue"
-      responses:
-        "201":
-          description: "Success"
-          schema:
-            $ref: "#/definitions/ArrayOfIssues"
-        "401":
-          description: "Not Found"
-          schema:
-            $ref: "#/definitions/Error"
-
-  /issue/{issueid}:
     get:
       summary: "retrieving Issue by Id"
       description: "This operation retrieves a Issue entity."
@@ -213,6 +167,21 @@ paths:
           description: "Success"
           schema:
             $ref: "#/definitions/Issue"
+        "401":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+  /issue/:
+    get:
+      summary: "retrieving Issue by Id"
+      description: "This operation retrieves a Issue entity."
+      tags:
+        - "issue"
+      responses:
+        "201":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ArrayOfIssues"
         "401":
           description: "Not Found"
           schema:

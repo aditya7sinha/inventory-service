@@ -1,6 +1,7 @@
 package com.mapsTree.inventory.service;
 
 import com.mapsTree.inventory.domain.Event;
+import com.mapsTree.inventory.domain.LocationRef;
 import com.mapsTree.inventory.repository.EventsRepository;
 import com.mapsTree.inventory.web.rest.mapper.EventMapper;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +26,7 @@ public class EventsService {
     }
 
     public Event insert(Event event){
-        LOG.info("In eventsService {}", event.toString());
+        LOG.info("In eventsService insert {}", event.toString());
         event.setEventId(generateEvent().toString());
         return eventsRepository.save(event);
     }
@@ -33,7 +35,7 @@ public class EventsService {
     }
 
     public List<com.mapsTree.inventory.model.Event> getAllEvents() {
-        LOG.info("In eventsService");
+        LOG.info("In eventsService getAllEvents");
         List<com.mapsTree.inventory.model.Event> eventList=new ArrayList<com.mapsTree.inventory.model.Event>();
         List<Event> ans= eventsRepository.findAll();
         int size=ans.size();
@@ -44,7 +46,39 @@ public class EventsService {
     }
 
     public Event getEvent(Event event){
-        LOG.info("In eventsService");
+        LOG.info("In eventsService getEvent");
         return eventsRepository.findEventById(event.getEventId());
+    }
+
+    public Event updateEvent(String eventId,Event event){
+        LOG.info("In eventsService updateEvent");
+        Event referencedEvent= eventsRepository.findEventById(eventId);
+        if(referencedEvent==null) {
+            return insert(event);
+        }
+        if(event.getUserId()!=null)
+            referencedEvent.setUserId(event.getUserId());
+        if(event.getName()!=null);
+            referencedEvent.setName(event.getName());
+        if(event.getTimeOfEvent()!=null);
+        referencedEvent.setTimeOfEvent(event.getTimeOfEvent());
+        if(event.getSummary()!=null);
+        referencedEvent.setSummary(event.getSummary());
+        if(event.getShortDescription()!=null);
+        referencedEvent.setShortDescription(event.getShortDescription());
+        if(event.getLocationRef()!=null){
+            LocationRef updatedLocationRef= new LocationRef();
+            updatedLocationRef.setLatitude(event.getLocationRef().getLatitude());
+            updatedLocationRef.setLongitude(event.getLocationRef().getLongitude());
+            updatedLocationRef.setAddress(event.getLocationRef().getAddress());
+            referencedEvent.setLocationRef(updatedLocationRef);
+        }
+        if(event.getSupport()!=null);
+        referencedEvent.setSupport(event.getSupport());
+        if(event.getCountry()!=null);
+        referencedEvent.setCountry(event.getCountry());
+        if(event.getStatus()!=null);
+        referencedEvent.setStatus(event.getStatus());
+        return eventsRepository.save(referencedEvent);
     }
 }

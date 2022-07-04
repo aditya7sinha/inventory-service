@@ -36,6 +36,20 @@ public interface EventMapper{
         @Mapping(target="support",source="support")
         @Mapping(target = "status", source="status")
         com.mapsTree.inventory.model.Event map(Event event);
+        @Mapping(source="userId",target="userId")
+        @Mapping(source="eventId",target="eventId")
+        @Mapping(source = "name",target = "name")
+        @Mapping(source = "timeOfEvent",target = "timeOfEvent")
+        @Mapping(source= "shortDescription",target = "shortDescription")
+        @Mapping(source = "summary", target= "summary")
+        @Mapping(source="eventLocation.locationId",target="locationRef.id")
+        @Mapping(source="eventLocation.latitude",target="locationRef.latitude")
+        @Mapping(source="eventLocation.longitude",target="locationRef.longitude")
+        @Mapping(source="eventLocation.address",target="locationRef.address")
+        @Mapping(source = "country",target= "country")
+        @Mapping(source="support",target="support")
+        @Mapping(source = "status",target="status")
+        Event map(com.mapsTree.inventory.model.Event event);
 
 
 }

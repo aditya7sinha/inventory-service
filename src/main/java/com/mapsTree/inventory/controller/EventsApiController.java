@@ -46,16 +46,6 @@ public class EventsApiController implements EventApi {
         return new ResponseEntity<>(eventList,HttpStatus.CREATED);
     }
 
-    @Override
-    public ResponseEntity<Event> eventPatch(EventCreate body) {
-        return EventApi.super.eventPatch(body);
-//        LOG.info("PATCH /event");
-//        String payload = body.toString();
-//        LOG.info("payload: {}",payload);
-//        com.mapsTree.inventory.domain.Event savedEvent = eventsService.insert(eventMapper.map(body));
-//        LOG.info("Saved {}", savedEvent.toString());
-//        return new ResponseEntity<>(eventMapper.map(savedEvent), HttpStatus.CREATED);
-    }
 
     @Override
     public ResponseEntity<Event> eventPost(EventCreate body) {
@@ -68,7 +58,13 @@ public class EventsApiController implements EventApi {
     }
 
     @Override
-    public ResponseEntity<Event> eventPut(EventCreate body) {
-        return EventApi.super.eventPut(body);
+    public ResponseEntity<Event> eventEventidPatch(String eventid, Event body) {
+        LOG.info("PATCH /event/{eventid}");
+        String payload=body.toString();
+        LOG.info("payload {}",payload);
+        com.mapsTree.inventory.domain.Event updatedEvent = eventsService.updateEvent(eventid,eventMapper.map(body));
+
+
+        return new ResponseEntity<>(eventMapper.map(updatedEvent), HttpStatus.CREATED);
     }
 }
