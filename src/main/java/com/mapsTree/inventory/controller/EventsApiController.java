@@ -1,12 +1,10 @@
 package com.mapsTree.inventory.controller;
 
 import com.mapsTree.inventory.api.EventApi;
-import com.mapsTree.inventory.api.EventApiDelegate;
 import com.mapsTree.inventory.model.Event;
 import com.mapsTree.inventory.model.EventCreate;
 import com.mapsTree.inventory.service.EventsService;
 import com.mapsTree.inventory.web.rest.mapper.EventMapper;
-import jdk.internal.org.jline.utils.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -41,7 +38,7 @@ public class EventsApiController implements EventApi {
     @Override
     public ResponseEntity<List<Event>> eventGet() {
         LOG.info("GET /event/");
-        List<Event> eventList= new ArrayList<Event>();
+        List<Event> eventList;
         eventList=eventsService.getAllEvents();
         return new ResponseEntity<>(eventList,HttpStatus.CREATED);
     }
@@ -63,8 +60,16 @@ public class EventsApiController implements EventApi {
         String payload=body.toString();
         LOG.info("payload {}",payload);
         com.mapsTree.inventory.domain.Event updatedEvent = eventsService.updateEvent(eventid,eventMapper.map(body));
-
-
         return new ResponseEntity<>(eventMapper.map(updatedEvent), HttpStatus.CREATED);
+    }
+
+
+    @Override
+    public ResponseEntity<List<Event>> eventEventsUseridGet(String userid) {
+        LOG.info("GET /event/events/{userid}");
+        com.mapsTree.inventory.domain.Event event= new com.mapsTree.inventory.domain.Event();
+        event.setUserId(userid);
+        List<com.mapsTree.inventory.model.Event> eventListofUser= eventsService.getEventsOfUser(event);
+        return new ResponseEntity<>(eventListofUser,HttpStatus.ACCEPTED);
     }
 }

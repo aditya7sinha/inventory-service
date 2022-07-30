@@ -13,6 +13,7 @@ import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class EventsService {
@@ -80,5 +81,11 @@ public class EventsService {
         if(event.getStatus()!=null);
         referencedEvent.setStatus(event.getStatus());
         return eventsRepository.save(referencedEvent);
+    }
+
+    public List<com.mapsTree.inventory.model.Event> getEventsOfUser(Event user) {
+        LOG.info("In eventsService eventsOfUser");
+        List<com.mapsTree.inventory.model.Event> userevents;
+        return eventsRepository.findEventsByUser(user.getUserId()).stream().map( event -> eventMapper.map(event)).collect(Collectors.toList());
     }
 }

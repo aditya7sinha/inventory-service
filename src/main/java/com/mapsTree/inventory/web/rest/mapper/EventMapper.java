@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {LocationMapper.class})
 public interface EventMapper{
@@ -50,6 +52,5 @@ public interface EventMapper{
         @Mapping(source="support",target="support")
         @Mapping(source = "status",target="status")
         Event map(com.mapsTree.inventory.model.Event event);
-
 
 }
