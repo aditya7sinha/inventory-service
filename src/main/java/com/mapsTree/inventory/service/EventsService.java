@@ -1,5 +1,7 @@
 package com.mapsTree.inventory.service;
 
+import com.mapsTree.inventory.controller.error.EventNotFoundException;
+import com.mapsTree.inventory.controller.error.UserNotFoundException;
 import com.mapsTree.inventory.domain.Event;
 import com.mapsTree.inventory.domain.LocationRef;
 import com.mapsTree.inventory.repository.EventsRepository;
@@ -9,9 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Null;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -46,13 +49,19 @@ public class EventsService {
         return eventList;
     }
 
-    public Event getEvent(Event event){
+    public Event getEvent(String eventId){
         LOG.info("In eventsService getEvent");
-        return eventsRepository.findEventById(event.getEventId());
+        if(!eventsRepository.eventExists(eventId)){
+            throw new EventNotFoundException(eventId);
+        }
+        return eventsRepository.findEventById(eventId);
     }
 
     public Event updateEvent(String eventId,Event event){
         LOG.info("In eventsService updateEvent");
+        if(!eventsRepository.eventExists(eventId)){
+            throw new EventNotFoundException(eventId);
+        }
         Event referencedEvent= eventsRepository.findEventById(eventId);
         if(referencedEvent==null) {
             return insert(event);
@@ -85,6 +94,9 @@ public class EventsService {
 
     public List<com.mapsTree.inventory.model.Event> getEventsOfUser(Event user) {
         LOG.info("In eventsService eventsOfUser");
+        if(eventsRepository.userExists(user.getUserId())){
+            throw new UserNotFoundException(user.getUserId());
+        }
         List<com.mapsTree.inventory.model.Event> userevents;
         return eventsRepository.findEventsByUser(user.getUserId()).stream().map( event -> eventMapper.map(event)).collect(Collectors.toList());
     }

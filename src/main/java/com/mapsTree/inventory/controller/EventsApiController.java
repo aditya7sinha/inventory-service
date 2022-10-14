@@ -27,12 +27,10 @@ public class EventsApiController implements EventApi {
     }
 
     @Override
-    public ResponseEntity<Event> eventEventidGet(String eventid) {
+    public ResponseEntity<Event> eventEventidGet(String eventid){
         LOG.info("GET /event/{id}");
         LOG.info("payload {}",eventid);
-        com.mapsTree.inventory.domain.Event event= new com.mapsTree.inventory.domain.Event();
-        event.setEventId(eventid);
-        return new ResponseEntity<>(eventMapper.map(eventsService.getEvent(event)),HttpStatus.CREATED);
+        return new ResponseEntity<>(eventMapper.map(eventsService.getEvent(eventid)),HttpStatus.FOUND);
     }
 
     @Override

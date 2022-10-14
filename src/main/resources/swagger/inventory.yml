@@ -386,3 +386,9 @@ definitions:
       message:
         type: "string"
         description: "returned error message"
+      status:
+        type: "string"
+        description: "returned status"
+      reason:
+        type: "string"
+        description: "returned reason"

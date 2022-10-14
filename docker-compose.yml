@@ -1,0 +1,18 @@
+version: "3.7"
+services:
+  inventory_service:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres_db
+  postgres_db:
+    image: postgres
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_DB: mapsTree
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
